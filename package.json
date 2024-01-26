@@ -1,0 +1,16 @@
+{
+  "name": "@recharged/server",
+  "version": "1.0.0",
+  "description": "Create a Recharged server.",
+  "homepage": "https://recharged.dev/client",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iconshot/recharged-server.git"
+  },
+  "keywords": [
+    "recharged",
+    "dbms",
+    "database"
+  ],
+  "license": "MIT"
+}
