@@ -630,13 +630,25 @@ class Query {
           break;
         }
 
+        // unset operators
+
         case "$unset": {
           return undefined;
 
           break;
         }
 
-        // property operators
+        case "$$unset": {
+          if (value === null) {
+            return undefined;
+          }
+
+          return value;
+
+          break;
+        }
+
+        // property operator
 
         case "$prop": {
           const tmpValue = this.findValue(target, document, argument);
@@ -650,15 +662,7 @@ class Query {
           break;
         }
 
-        case "$$prop": {
-          const tmpValue = this.findValue(target, document, argument);
-
-          return this.clone(tmpValue);
-
-          break;
-        }
-
-        // conditional operators
+        // conditional operator
 
         case "$cond": {
           const [rules, trueOperators, falseOperators] = argument;
@@ -687,36 +691,6 @@ class Query {
 
           if (tmpValue === undefined) {
             return null;
-          }
-
-          return tmpValue;
-
-          break;
-        }
-
-        case "$$cond": {
-          const [rules, trueOperators, falseOperators] = argument;
-
-          const boolean = this.findRules(target, rules, document);
-
-          let tmpValue = value;
-
-          if (boolean) {
-            tmpValue = this.applyOperators(
-              value,
-              trueOperators,
-              target,
-              document
-            );
-          } else {
-            if (falseOperators !== undefined) {
-              tmpValue = this.applyOperators(
-                value,
-                falseOperators,
-                target,
-                document
-              );
-            }
           }
 
           return tmpValue;
@@ -974,6 +948,65 @@ class Query {
           break;
         }
 
+        // timestamp operators
+
+        case "$timestamp": {
+          let input = null;
+
+          if (argument !== null) {
+            switch (typeof argument) {
+              case "string":
+              case "number": {
+                input = argument;
+
+                break;
+              }
+
+              case "object": {
+                input = this.applyOperators(value, argument, document);
+
+                break;
+              }
+            }
+          }
+
+          let date = null;
+
+          switch (typeof input) {
+            case "string": {
+              date = new Date(input);
+
+              if (isNaN(date.getTime())) {
+                date = null;
+              }
+
+              break;
+            }
+
+            case "number": {
+              date = new Date(input);
+
+              break;
+            }
+
+            case "object": {
+              if (input === null) {
+                date = new Date();
+              }
+
+              break;
+            }
+          }
+
+          if (date === null) {
+            return null;
+          }
+
+          return date.toJSON();
+
+          break;
+        }
+
         // multitype operators
 
         case "$length": {
@@ -983,15 +1016,6 @@ class Query {
           if (length === undefined) {
             return null;
           }
-
-          return length;
-
-          break;
-        }
-
-        case "$$length": {
-          const length =
-            value !== null && value !== undefined ? value.length : undefined;
 
           return length;
 
@@ -1008,18 +1032,6 @@ class Query {
           if (element === undefined) {
             return null;
           }
-
-          return this.clone(element);
-
-          break;
-        }
-
-        case "$$at": {
-          if (!(typeof value === "string" || Array.isArray(value))) {
-            return value;
-          }
-
-          const element = value.at(argument);
 
           return this.clone(element);
 

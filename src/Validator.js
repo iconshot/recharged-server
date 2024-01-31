@@ -393,34 +393,33 @@ class Validator {
           break;
         }
 
-        case "$unset": {
+        case "$unset":
+        case "$$unset": {
           if (argument !== null) {
-            throw new Error('Update operator "$unset" expects null.');
+            throw new Error(`Update operator "${key}" expects null.`);
           }
 
           break;
         }
 
-        case "$prop":
-        case "$$prop": {
+        case "$prop": {
           if (typeof argument !== "string") {
-            throw new Error(`Update operator "${key}" expects a string.`);
+            throw new Error('Update operator "$prop" expects a string.');
           }
 
           break;
         }
 
-        case "$cond":
-        case "$$cond": {
+        case "$cond": {
           if (!Array.isArray(argument)) {
             throw new Error(
-              `Update operator "${key}" expects two to three arguments: condition rule object, "true" operator object, "false" operator object (optional).`
+              'Update operator "$cond" expects two to three arguments: condition rule object, "true" operator object, "false" operator object (optional).'
             );
           }
 
           if (argument.length !== 2 && argument.length !== 3) {
             throw new Error(
-              `Update operator "${key}" expects two to three arguments: condition rule object, "true" operator object, "false" operator object (optional).`
+              'Update operator "$cond" expects two to three arguments: condition rule object, "true" operator object, "false" operator object (optional).'
             );
           }
 
@@ -428,7 +427,7 @@ class Validator {
 
           if (!this.isObject(rules)) {
             throw new Error(
-              `Update operator "${key}" expects its first argument to be a rule object.`
+              'Update operator "$cond" expects its first argument to be a rule object.'
             );
           }
 
@@ -436,7 +435,7 @@ class Validator {
 
           if (!this.isObject(trueOperators)) {
             throw new Error(
-              `Update operator "${key}" expects its second argument to be an operator object.`
+              'Update operator "$cond" expects its second argument to be an operator object.'
             );
           }
 
@@ -446,7 +445,7 @@ class Validator {
             !(this.isObject(falseOperators) || falseOperators === undefined)
           ) {
             throw new Error(
-              `Update operator "${key}" expects its third argument to be an operator object (optional).`
+              'Update operator "$cond" expects its third argument to be an operator object (optional).'
             );
           }
 
@@ -599,19 +598,50 @@ class Validator {
           break;
         }
 
-        case "$length":
-        case "$$length": {
-          if (argument !== null) {
-            throw new Error(`Update operator "${key}" expects null.`);
+        case "$timestamp": {
+          switch (typeof argument) {
+            case "string":
+            case "number": {
+              break;
+            }
+
+            case "object": {
+              if (Array.isArray(argument)) {
+                throw new Error(
+                  `Update operator "${key}" expects null, number, string or operator object.`
+                );
+              }
+
+              if (this.isObject(argument)) {
+                this.applyOperators(argument);
+              }
+
+              break;
+            }
+
+            default: {
+              throw new Error(
+                `Update operator "${key}" expects null, number, string or operator object.`
+              );
+
+              break;
+            }
           }
 
           break;
         }
 
-        case "$at":
-        case "$$at": {
+        case "$length": {
+          if (argument !== null) {
+            throw new Error('Update operator "$length" expects null.');
+          }
+
+          break;
+        }
+
+        case "$at": {
           if (typeof argument !== "number") {
-            throw new Error(`Update operator "${key}" expects a number.`);
+            throw new Error('Update operator "$at" expects a number.');
           }
 
           break;
