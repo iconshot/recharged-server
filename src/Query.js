@@ -1002,7 +1002,7 @@ class Query {
             return null;
           }
 
-          return date.toJSON();
+          return date.getTime();
 
           break;
         }
