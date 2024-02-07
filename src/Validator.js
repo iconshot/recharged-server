@@ -590,6 +590,10 @@ class Validator {
           break;
         }
 
+        case "$remove": {
+          break;
+        }
+
         case "$join": {
           if (typeof argument !== "string") {
             throw new Error('Update operator "$join" expects a string.');

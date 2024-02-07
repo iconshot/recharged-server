@@ -928,6 +928,16 @@ class Query {
           break;
         }
 
+        case "$remove": {
+          if (!Array.isArray(value)) {
+            return value;
+          }
+
+          return value.filter((element) => element !== argument);
+
+          break;
+        }
+
         case "$unique": {
           if (!Array.isArray(value)) {
             return value;
