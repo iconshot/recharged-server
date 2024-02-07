@@ -233,6 +233,14 @@ class Validator {
           break;
         }
 
+        case "$all": {
+          if (!Array.isArray(argument)) {
+            throw new Error('Find operator "$all" expects an array.');
+          }
+
+          break;
+        }
+
         case "$some": {
           if (!this.isObject(argument)) {
             throw new Error('Find operator "$some" expects a rule object.');
