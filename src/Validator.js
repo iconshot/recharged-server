@@ -582,15 +582,15 @@ class Validator {
           break;
         }
 
+        case "$remove": {
+          break;
+        }
+
         case "$unique": {
           if (argument !== null) {
             throw new Error('Update operator "$unique" expects null.');
           }
 
-          break;
-        }
-
-        case "$remove": {
           break;
         }
 
