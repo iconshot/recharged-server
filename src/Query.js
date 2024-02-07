@@ -439,6 +439,16 @@ class Query {
           break;
         }
 
+        case "$all": {
+          if (!Array.isArray(value)) {
+            return false;
+          }
+
+          return value.every((element) => argument.includes(element));
+
+          break;
+        }
+
         case "$includes": {
           if (!(typeof value === "string" || Array.isArray(value))) {
             return false;
@@ -450,16 +460,6 @@ class Query {
         }
 
         // array operators
-
-        case "$all": {
-          if (!Array.isArray(value)) {
-            return false;
-          }
-
-          return value.every((element) => argument.includes(element));
-
-          break;
-        }
 
         case "$some": {
           if (!Array.isArray(value)) {
