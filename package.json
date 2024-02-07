@@ -1,6 +1,6 @@
 {
   "name": "@recharged/server",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Create a Recharged server.",
   "homepage": "https://recharged.dev/server",
   "repository": {

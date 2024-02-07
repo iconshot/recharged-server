@@ -229,15 +229,15 @@ class Validator {
           break;
         }
 
+        case "$includes": {
+          break;
+        }
+
         case "$all": {
           if (!Array.isArray(argument)) {
             throw new Error('Find operator "$all" expects an array.');
           }
 
-          break;
-        }
-
-        case "$includes": {
           break;
         }
 
