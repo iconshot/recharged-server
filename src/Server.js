@@ -69,9 +69,11 @@ class Server {
 
     const names = await fsp.readdir(this.dir);
 
+    const tmpNames = names.filter((name) => !name.startsWith("."));
+
     const promises = [];
 
-    for (const name of names) {
+    for (const name of tmpNames) {
       const database = this.createDatabase(name);
 
       promises.push(database.read());

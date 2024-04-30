@@ -50,9 +50,11 @@ class Collection {
 
     const files = await fsp.readdir(dir);
 
+    const tmpFiles = files.filter((file) => !file.startsWith("."));
+
     const promises = [];
 
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < tmpFiles.length; i++) {
       const file = this.createFile();
 
       const read = async () => {
